@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -130,7 +132,7 @@ public class MainActivity extends Activity {
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class MyFragment1 extends Fragment {
+	public static class MyFragment1 extends Fragment implements OnClickListener {
 		int mCount = 0;
 		public void fragmentButtonMethod(View button){
 			Toast.makeText(this.getActivity().getApplicationContext(), "B1", Toast.LENGTH_SHORT).show();
@@ -143,11 +145,15 @@ public class MainActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
+			Button button = (Button)rootView.findViewById(R.id.button1);
+			button.setOnClickListener(this);
 			// 状態の復元
 			if(savedInstanceState != null){
 				Log.d("test", "restore...");
 				EditText edit = (EditText)rootView.findViewById(R.id.editText1);
 				edit.setText(savedInstanceState.getString("text"));
+				mCount = savedInstanceState.getInt("count");
+				button.setText(savedInstanceState.getString("button"));
 			}
 			return rootView;
 		}
@@ -160,10 +166,20 @@ public class MainActivity extends Activity {
 			Log.d("test", "save...");
 			EditText edit = (EditText)this.getView().findViewById(R.id.editText1);
 			outState.putString("text", edit.getText().toString());
+			outState.putInt("count", mCount);
+			Button button = (Button)this.getView().findViewById(R.id.button1);
+			outState.putString("button", button.getText().toString());
+		}
+		
+		@Override
+		public void onClick(View v) {
+			String s = "CNT:" + mCount++; 
+			Button button = (Button)getView().findViewById(R.id.button1);
+			button.setText(s);
 		}
 	}
 	
-	public static class MyFragment2 extends Fragment {
+	public static class MyFragment2 extends Fragment implements OnClickListener {
 		int mCount = 0;
 		public void fragmentButtonMethod(View button){
 			Toast.makeText(this.getActivity().getApplicationContext(), "B2", Toast.LENGTH_SHORT).show();
@@ -175,7 +191,17 @@ public class MainActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
+			Button button = (Button)rootView.findViewById(R.id.button1);
+			button.setOnClickListener(this);
+
 			return rootView;
+		}
+
+		@Override
+		public void onClick(View v) {
+			String s = "CNT:" + mCount++; 
+			Button button = (Button)getView().findViewById(R.id.button1);
+			button.setText(s);
 		}
 	}
 }
