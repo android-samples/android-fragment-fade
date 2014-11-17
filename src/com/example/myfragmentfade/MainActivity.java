@@ -1,20 +1,27 @@
 package com.example.myfragmentfade;
 
+import android.R.integer;
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.os.Build;
 
 public class MainActivity extends Activity {
+	public void fragmentButtonMethod(View button){
+		Toast.makeText(this.getApplicationContext(), "A1", Toast.LENGTH_SHORT).show();
+	}
 
 	public void buttonMethod1(View button){
 		// Fragment取得
@@ -124,17 +131,43 @@ public class MainActivity extends Activity {
 	 * A placeholder fragment containing a simple view.
 	 */
 	public static class MyFragment1 extends Fragment {
+		int mCount = 0;
+		public void fragmentButtonMethod(View button){
+			Toast.makeText(this.getActivity().getApplicationContext(), "B1", Toast.LENGTH_SHORT).show();
+		}
 		public MyFragment1() {
 		}
+		
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
+			// 状態の復元
+			if(savedInstanceState != null){
+				Log.d("test", "restore...");
+				EditText edit = (EditText)rootView.findViewById(R.id.editText1);
+				edit.setText(savedInstanceState.getString("text"));
+			}
 			return rootView;
 		}
+		
+		@Override
+		public void onSaveInstanceState(Bundle outState) {
+			// TODO Auto-generated method stub
+			super.onSaveInstanceState(outState);
+			// 状態の保存
+			Log.d("test", "save...");
+			EditText edit = (EditText)this.getView().findViewById(R.id.editText1);
+			outState.putString("text", edit.getText().toString());
+		}
 	}
+	
 	public static class MyFragment2 extends Fragment {
+		int mCount = 0;
+		public void fragmentButtonMethod(View button){
+			Toast.makeText(this.getActivity().getApplicationContext(), "B2", Toast.LENGTH_SHORT).show();
+		}
 		public MyFragment2() {
 		}
 		@Override
